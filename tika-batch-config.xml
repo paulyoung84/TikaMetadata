@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!-- NOTE: tika-batch is still an experimental feature.
+    The configuration file will likely change and be backward incompatible
+    with new versions of Tika.  Please stay tuned.
+    -->
+
+<tika-batch-config
+	timeoutCheckPulseMillis="30000"
+        timeoutThresholdMillis="300000"
+        maxAliveTimeSeconds="-1"
+        pauseOnEarlyTerminationMillis="60000"
+        maxQueueSize="10000"
+        numConsumers="10">
+
+    <!-- options to allow on the commandline -->
+    <commandline>
+        <option opt="c" longOpt="tika-config" hasArg="true"
+                description="tika config file"/>
+        <option opt="bc" longOpt="batch-config" hasArg="true"
+                description="xml batch config file"/>
+        <option opt="randomCrawl" hasArg="false"
+                description="file crawler crawls directories randomly"/>
+        <option opt="numConsumers" hasArg="true"
+                description="number of fileConsumers threads"/>
+        <option opt="maxFileSizeBytes" hasArg="true"
+                description="maximum file size to process; do not process files larger than this"/>
+        <option opt="maxQueueSize" hasArg="true"
+                description="maximum queue size for FileResources"/>
+        <option opt="fileList" hasArg="true"
+                description="file that contains a list of files (relative to srcDir) to process"/>
+        <option opt="fileListEncoding" hasArg="true"
+                description="encoding for fileList"/>
+        <option opt="inputDir" hasArg="true"
+                description="root directory for the files to be processed"/>
+        <option opt="startDir" hasArg="true"
+                description="directory (under srcDir) at which to start crawling"/>
+        <option opt="outputDir" hasArg="true"
+                description="outputdirectory for output"/>
+        <option opt="recursiveParserWrapper"
+                description="use the RecursiveParserWrapper or not (default = false)"/>
+        <option opt="basicHandlerType" hasArg="true"
+                description="what type of content handler: xml, text, html, body"/>
+        <option opt="outputSuffix" hasArg="true"
+                description="suffix to add to the end of the output file name"/>
+        <option opt="timeoutThresholdMillis" hasArg="true"
+                description="how long to wait before determining that a consumer is stale"/>
+        <option opt="includeFilePat" hasArg="true"
+                description="regex that specifies which files to process"/>
+        <option opt="excludeFilePat" hasArg="true"
+                description="regex that specifies which files to avoid processing"/>
+    </commandline>
+
+	<crawler builderClass="org.apache.tika.batch.fs.builders.FSCrawlerBuilder"
+        	crawlOrder="random"
+		maxFilesToAdd="" 
+		maxFilesToConsider="-1" 
+		includeFilePat=""
+		excludeFilePat=""
+		maxFileSizeBytes="-1"
+        srcDir="input"
+        />
+<!--
+    This is an example of a crawler that reads a list of files to be processed from a
+    file.  This assumes that the files in the list are relative to srcDir.
+    <crawler class="org.apache.tika.batch.fs.builders.FSCrawlerBuilder"
+             fileList="files.txt"
+             fileListEncoding="UTF-8"
+             maxFilesToAdd="-1"
+             maxFilesToConsider="-1"
+             includeFilePat="(?i).pdf$"
+             excludeFilePat="(?i).msg$"
+             maxFileSizeBytes="-1"
+             srcDir="input"
+    />
+-->
+    <consumers builderClass="org.apache.tika.batch.fs.builders.BasicTikaFSConsumersBuilder"
+               recursiveParserWrapper="true">
+        <parser builderClass="org.apache.tika.batch.builders.AppParserFactoryBuilder"
+                class="org.apache.tika.batch.DigestingAutoDetectParserFactory"
+                parseRecursively="true"
+                digest="md5" digestMarkLimit="1000000"/>
+
+<!--                class="org.apache.tika.batch.DigestingAutoDetectParserFactory" -->
+
+        <contenthandler builderClass="org.apache.tika.batch.builders.DefaultContentHandlerFactoryBuilder"
+                        basicHandlerType="body" writeLimit="-1"/>
+
+        <!-- can add compression: bz|gzip|zip. Make sure to change outputSuffix too.
+        	e.g. compression="bz" outputSuffix="json.bz"
+         -->
+        <outputstream class="FSOutputStreamFactory" outputDir="output"
+                      encoding="UTF-8" outputSuffix="json" />
+    </consumers>
+
+    <!-- reporter and interrupter are optional -->
+    <reporter builderClass="org.apache.tika.batch.builders.SimpleLogReporterBuilder" sleepMillis="1000"
+              reporterStaleThresholdMillis="60000"/>
+    <interrupter builderClass="org.apache.tika.batch.builders.InterrupterBuilder"/>
+</tika-batch-config>
