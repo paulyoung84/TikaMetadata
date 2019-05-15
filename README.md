@@ -5,7 +5,7 @@ TikaMetadata Readme
 
 About the script
 This script uses Apache Tika to run over digital and grab additional metadata from within the format, creating a spreadsheet of the metadata for analysis.
-The script requires you to download Apache Tika version tika-app-1.19 - https://archive.apache.org/dist/tika/ - and included within the clone folder, it also needs Java installed to run.
+The script requires you to downloading Apache Tika version tika-app-1.19.jar - https://archive.apache.org/dist/tika/ - and include within the clone folder, it also needs Java installed to run.
 
 Running the script:
 
