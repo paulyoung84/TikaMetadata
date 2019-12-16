@@ -1,6 +1,6 @@
 '''
 
-Based on script by Peter May from British Library created on 17 Apr 2012, updated to Python 3 and added tika-app-1.18 batch processing to create json output, then tidy for processing of main script to collate json into single CSV
+Based on script by Peter May from British Library created on 17 Apr 2012, updated to Python 3 and added tika batch processing to create json output, then tidy for processing of main script to collate json into single CSV
 
 @author: Paul Young
 @organization: The National Archives
@@ -27,7 +27,7 @@ HEADINGS = ['Filename', 'Read TikaRunner Output']
 
 
 def tikagrab(origdir): #batch process to run tika process to create json files
-	command = "java -Xmx1024m -jar tika-app-1.19.jar -Jmx1024m -bc tika-batch-config.xml -J -m -i "+ '"' + origdir + '"' " -o "+ '"'+ JSONout + '"'
+	command = "java -Xmx1024m -jar tika-app-1.22.jar -Jmx1024m -bc tika-batch-config.xml -J -m -i "+ '"' + origdir + '"' " -o "+ '"'+ JSONout + '"'
 	subprocess.call(command, shell=True)
 	
 def __listFilesInDir(JSONout):
