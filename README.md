@@ -5,7 +5,7 @@ TikaMetadata Readme
 
 About the script
 This script uses Apache Tika to run over digital and grab additional metadata from within the format, creating a spreadsheet of the metadata for analysis.
-The script requires you to downloading Apache Tika version tika-app-1.22.jar - https://archive.apache.org/dist/tika/ - and include within the clone folder, it also needs Java installed to run.
+The script requires you to download Apache Tika version tika-server-1.24.1.jar and tika-server-1.24.1.jar.md5 - https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/https://archive.apache.org/dist/tika/ - and include within the clone folder, it also needs Java installed to run.
 
 Running the script:
 
@@ -13,7 +13,7 @@ Running the script:
 
 2.	It will open a window with a prompt to enter the filepath of the directory you want to scan. It should be run over a folder rather than single files. (You can drag the folder into the window for the path to populate the file path)
 
-3.	The script will then run through the directory, first of all creating a folder where you are running the script for the JSON output which Tika is creating. It then generates the DROID information. These two sets of information are then merged into a single CSV file, which is called TikaMetadata_Output_(name of folder run over).csv, the output will appear in the folder you ran the .py or .bat file.
+3.	The script will then run through the directory, it runs through each file seperately and prints on screen when it has completed scanning, or an error if it fails. It will output a CSV file as the final results in the same directory, it will have a column added called TikaRun which will state if that file was able to be scanned succesfully or not.
 
 Notes:
 
