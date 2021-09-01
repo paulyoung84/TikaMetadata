@@ -5,7 +5,7 @@ TikaMetadata Readme
 
 About the script
 This script uses Apache Tika to run over digital and grab additional metadata from within the format, creating a spreadsheet of the metadata for analysis.
-The script requires you to download Apache Tika version tika-server-1.24.1.jar and tika-server-1.24.1.jar.md5 - https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/https://archive.apache.org/dist/tika/ - and include within the clone folder, it also needs Java installed to run.
+The script requires you to download Apache Tika version tika-server-1.24.1.jar and tika-server-1.24.1.jar.md5 - https://repo1.maven.org/maven2/org/apache/tika/tika-server/ - and include within the clone folder, it also needs Java installed to run.
 
 Running the script:
 
