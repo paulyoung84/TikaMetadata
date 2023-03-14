@@ -7,6 +7,7 @@ import pandas as pd
 import json
 from pandas import json_normalize
 import os.path
+import hashlib
 
 
 IGNORE = ['X-TIKA:content', 'X-TIKA:EXCEPTION:embedded_stream_exception','PCF1','Chroma Palette PaletteEntry','Blue Colorant','Blue TRC','Green Colorant','Green TRC','Red Colorant','Red TRC']
@@ -31,7 +32,16 @@ for dirpath, dirnames, filenames in os.walk(directory_to_scan):
             data = json_normalize(parsed['metadata'])
             data['FilePath'] = file_path
             data['FileName'] = filename
-            data['TikaRun'] = 'Success'
+            data['TikaRun'] = 'Success' 
+            with open(file_path, 'rb') as afile:
+                    sha256_object = hashlib.sha256()
+                    block_size = 65536 * sha256_object.block_size
+                    chunk = afile.read(block_size)
+                    while chunk:
+                        sha256_object.update(chunk)
+                        chunk = afile.read(block_size)
+                    gethash = sha256_object.hexdigest()
+                    data['sha256_checksum'] = gethash
             for k in IGNORE:
                 if k in data:
                     data[k] = "Data removed for presentation purposes"
@@ -44,7 +54,7 @@ for dirpath, dirnames, filenames in os.walk(directory_to_scan):
             print(filename, 'NOT scanned by Tika (failed)')
 
 
-cols_to_move = ['FileName', 'FilePath', 'TikaRun']
+cols_to_move = ['FileName', 'FilePath', 'TikaRun', 'sha256_checksum']
 df = df[ cols_to_move + [ col for col in df.columns if col not in cols_to_move ] ]
 df.to_csv(outputfile,index=False, encoding='utf-8')
 print('Scanning completed')
