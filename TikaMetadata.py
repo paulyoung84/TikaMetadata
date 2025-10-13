@@ -45,12 +45,13 @@ for dirpath, dirnames, filenames in os.walk(directory_to_scan):
             for k in IGNORE:
                 if k in data:
                     data[k] = "Data removed for presentation purposes"
-            df = data.append(df)
+            df = pd.concat([df, data], ignore_index=True)
             print(filename, 'scanned by Tika')
         except:
             data['FileName'] = filename
             data['FilePath'] = dirpath
             data['TikaRun'] = 'Failed'
+            df = pd.concat([df, data], ignore_index=True)
             print(filename, 'NOT scanned by Tika (failed)')
 
 
