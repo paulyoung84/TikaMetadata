@@ -20,8 +20,8 @@ if not os.path.exists(directory_to_scan):
         print("Please enter a filepath for location of the files you want to scan. e.g: C:\\Users\\example")
         exit(0)
 
-outputfile = os.path.basename(os.path.normpath(directory_to_scan))
-outputfile = "TikaMetadata_Output_" + outputfile +".csv"
+outputname = os.path.basename(os.path.normpath(directory_to_scan))
+outputfile = os.path.join(filepath, "TikaMetadata_Output_" + outputname + ".csv")
 
 df = pd.DataFrame()
 for dirpath, dirnames, filenames in os.walk(directory_to_scan):
