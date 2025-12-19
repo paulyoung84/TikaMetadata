@@ -1,6 +1,6 @@
 import os
 filepath = os.getcwd()
-os.environ['TIKA_SERVER_JAR'] = 'file:////'+filepath+'\\tika-server-1.28.4.jar'
+os.environ['TIKA_SERVER_JAR'] = 'file:////'+filepath+'\\tika-server-standard.jar'
 import tika
 from tika import parser
 import pandas as pd
